@@ -6,7 +6,9 @@ const Home = () => {
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      setTodos([...todos, inputValue]);
+      setTodos([...todos, inputValue,]);
+      postComment (inputValue)
+    
       setInputValue("");
     }
   };
@@ -30,7 +32,26 @@ const Home = () => {
   const handleDeleteTodo = (index) => {
     const updatedTodos = [...todos];
     updatedTodos.splice(index, 1);
-    setTodos(updatedTodos);
+    setTodos(updatedTodos)
+    deleteTodo(index);
+  };
+  const deleteTodo = (index) => {
+    fetch('https://jsonplaceholder.typicode.com/todos/'+index, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => {
+        if (!res.ok) throw Error(res.statusText);
+        return res.json();
+      })
+      .then(response => {
+        
+      
+        console.log('Success:', response);
+      })
+      .catch(error => console.error(error));
   };
 
   const postComment = (newComment) => {
